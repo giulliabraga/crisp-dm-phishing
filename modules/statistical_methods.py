@@ -1,5 +1,7 @@
+from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy import stats
 from scipy.stats import friedmanchisquare
 from scikit_posthocs import posthoc_nemenyi_friedman
 
@@ -203,7 +205,9 @@ class StatisticalMethods():
             'recall': 'Recall',
             'inference_time': 'Tempo de inferência', 
             'training_time': 'Tempo de treinamento', 
-            'f1_score': 'F1-score'
+            'f1_score': 'F1-score',
+            'train_accuracy': 'Acurácia de treino',
+            'test_accuracy': 'Acurácia de teste'
         }
 
         formatted_list = []
@@ -233,3 +237,6 @@ class StatisticalMethods():
 
         formatted_table = pd.DataFrame(formatted_list)
         return formatted_table
+
+
+

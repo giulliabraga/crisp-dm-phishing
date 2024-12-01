@@ -6,8 +6,9 @@ from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, GridSea
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, roc_auc_score, precision_score, recall_score
 from sklearn.pipeline import Pipeline, make_pipeline
 import statistics as st
+from imblearn.over_sampling import ADASYN
 
-def cross_validation(X, y, pipelines, n_folds=10):
+def cross_validation(X, y, pipelines, n_folds=10, use_adasyn=False):
     features = X.values
     target = y.values
 
@@ -41,6 +42,10 @@ def cross_validation(X, y, pipelines, n_folds=10):
             # Train and test split for this particular fold
             X_train_split, y_train_split = features[train_idx], target[train_idx]
             X_test_split, y_test_split = features[test_idx], target[test_idx]
+
+            if use_adasyn == True:
+                adasyn = ADASYN(sampling_strategy='auto', random_state=42)
+                X_train_split, y_train_split = adasyn.fit_resample(X_train_split, y_train_split)
 
             # Fitting pipeline
             start_train = time.time()
@@ -80,9 +85,15 @@ def cross_validation(X, y, pipelines, n_folds=10):
             metrics_per_split['CM'].append(conf_matrix)
             metrics_per_split['training_time'].append(training_time)
             metrics_per_split['inference_time'].append(inference_time)
-            
+
+        
+                      
         metrics = pd.DataFrame(metrics_per_split)
-        metrics.to_csv(f'../metrics/metrics_{model_name}_ADASYN_cv.csv', index=False)
+
+        if use_adasyn == True:
+            metrics.to_csv(f'../metrics/metrics_adasyn_{model_name}_cv.csv', index=False)
+        else:
+            metrics.to_csv(f'../metrics/metrics_{model_name}_cv.csv', index=False)
 
         print(f'\n Metrics: \n{metrics}')
     
