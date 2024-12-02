@@ -207,7 +207,8 @@ class StatisticalMethods():
             'training_time': 'Tempo de treinamento', 
             'f1_score': 'F1-score',
             'train_accuracy': 'Acurácia de treino',
-            'test_accuracy': 'Acurácia de teste'
+            'test_accuracy': 'Acurácia de teste',
+            'precision': 'Precisão'
         }
 
         formatted_list = []
